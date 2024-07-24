@@ -10,6 +10,7 @@ import com.ibm.broker.plugin.MbMessageAssembly;
 import com.ibm.broker.plugin.MbOutputTerminal;
 import com.ibm.broker.plugin.MbService;
 import com.ibm.broker.plugin.MbUserException;
+import com.ibm.broker.plugin.MbUtilities;
 
 public class ReadFlow_ReadCredsFromJava extends MbJavaComputeNode {
 
@@ -29,15 +30,29 @@ public class ReadFlow_ReadCredsFromJava extends MbJavaComputeNode {
 			String username = new String();
 			char[] password = new char[0];
 
+			String credsType = (String)(getUserDefinedAttribute("credsType"));
+			if ( ( credsType == null ) || ( credsType.isEmpty()) )
+			{
+				credsType = "userdefined";
+			}
+			else if ( !credsType.equals("userdefined") )
+			{
+				// The server may not be configured to allow non-userdefined creds
+				String scyCredTypes = MbUtilities.getServerProperty("Credentials/userRetrievableCredentialTypes");
+				if ( ( scyCredTypes == null ) || ( scyCredTypes.isEmpty() ) || ( scyCredTypes.equals("userdefined") ) )
+				{
+					System.out.println("\nCredentials/userRetrievableCredentialTypes not found or is the default - expect exceptions when accessing credentials other than userdefined\n");
+				}
+			}
 			String alias = (String)(getUserDefinedAttribute("credsAlias"));
 			
 			MbCredential myCred;
 			try {
-				myCred = MbCredential.getCredential("userdefined", alias);
+				myCred = MbCredential.getCredential(credsType, alias);
 
 
 				if (myCred == null) {
-					System.out.println("Could not find credential userdefined::"+alias);
+					System.out.println("Could not find credential "+credsType+"::"+alias);
 				}
 				else
 				{
@@ -51,6 +66,7 @@ public class ReadFlow_ReadCredsFromJava extends MbJavaComputeNode {
 					System.out.println("Java code found username |"+username+"| password |"+(new String(password))+"|");
 				}
 			} catch (MbException e) {
+				e.printStackTrace();
 				throw new RuntimeException("Something went wrong during credential lookup", e);
 			}
 			

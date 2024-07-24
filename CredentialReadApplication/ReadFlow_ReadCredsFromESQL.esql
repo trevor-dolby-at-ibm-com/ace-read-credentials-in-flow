@@ -1,9 +1,10 @@
-CREATE FUNCTION getUsernameAndPassword(IN alias CHARACTER, OUT username CHARACTER, OUT password CHARACTER)
+CREATE FUNCTION getUsernameAndPassword(IN credsType CHARACTER, IN alias CHARACTER, OUT username CHARACTER, OUT password CHARACTER)
       RETURNS BOOLEAN
       LANGUAGE JAVA
       EXTERNAL NAME "ace.demo.creds.ReadCredsForESQL.getUsernameAndPassword";
 
 DECLARE credsAlias  EXTERNAL CHARACTER;
+DECLARE credsType   EXTERNAL CHARACTER 'userdefined';
 
 
 CREATE COMPUTE MODULE ReadFlow_ReadCredsFromESQL
@@ -14,7 +15,7 @@ CREATE COMPUTE MODULE ReadFlow_ReadCredsFromESQL
 		DECLARE USERNAME CHARACTER;
 		DECLARE PASSWORD CHARACTER;
 		
-		DECLARE rc BOOLEAN getUsernameAndPassword(credsAlias, USERNAME, PASSWORD);
+		DECLARE rc BOOLEAN getUsernameAndPassword(credsType, credsAlias, USERNAME, PASSWORD);
 		LOG EVENT SEVERITY 2 CATALOG 'BIPmsgs' MESSAGE 8099 VALUES('ReadFlow_ReadCredsFromESQL', USERNAME, PASSWORD, '');
 		
 		RETURN TRUE;

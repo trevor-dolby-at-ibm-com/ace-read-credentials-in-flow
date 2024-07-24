@@ -7,15 +7,15 @@ import com.ibm.broker.plugin.MbException;
 
 public class ReadCredsForESQL
 {
-	public static Boolean getUsernameAndPassword(String alias, String [] username, String [] password)
+	public static Boolean getUsernameAndPassword(String credsType, String alias, String [] username, String [] password)
 	{
 		char[] passwordChars = new char[0];
 
 		MbCredential myCred;
 		try {
-			myCred = MbCredential.getCredential("userdefined", alias);
+			myCred = MbCredential.getCredential(credsType, alias);
 			if (myCred == null) {
-				System.out.println("Could not find credential "+alias);
+				System.out.println("Could not find credential "+credsType+"::"+alias);
 			}
 			else
 			{

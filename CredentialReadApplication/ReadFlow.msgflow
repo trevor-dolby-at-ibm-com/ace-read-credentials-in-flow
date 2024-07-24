@@ -5,6 +5,9 @@
     <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.credsAlias" name="credsAlias" defaultValueLiteral="demoAlias">
       <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.credsType" name="credsType" defaultValueLiteral="userdefined">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
     <translation xmi:type="utility:TranslatableString" key="ReadFlow" bundleName="ReadFlow" pluginId="CredentialReadApplication"/>
     <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/CredentialReadApplication/icons/full/obj16/ReadFlow.gif"/>
     <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/CredentialReadApplication/icons/full/obj30/ReadFlow.gif"/>
@@ -24,6 +27,9 @@
     <propertyOrganizer>
       <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.credsAlias">
         <propertyName xmi:type="utility:TranslatableString" key="Property.credsAlias" bundleName="ReadFlow" pluginId="CredentialReadApplication"/>
+        <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.credsType">
+          <propertyName xmi:type="utility:TranslatableString" key="Property.credsType" bundleName="ReadFlow" pluginId="CredentialReadApplication"/>
+        </propertyDescriptor>
       </propertyDescriptor>
     </propertyOrganizer>
     <stickyBoard/>
