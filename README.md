@@ -63,3 +63,51 @@ to allow all credential types to be read.
 
 To instruct the code in this repo to read a type other than `userdefined`, set the `credsType` flow-level
 user-defined property, either using the BAR editor or `mqsiapplybaroverride`.
+
+# IWHI/ACEaaS/CP4i
+
+IBM webMethods Hybrid Integration, ACE as a Service, and the Cloud Pak for Integration use a slightly 
+different approach to setting the credentials, but the same flow runtime code can still read them:
+
+![ace-credentials-containers](/files/ace-credentials-containers.png)
+
+Setting the credentials requires creating a configuration of the correct type, such as
+[setdbparms.txt](https://www.ibm.com/docs/en/app-connect/13.0.x?topic=types-setdbparmstxt-type). 
+This will then cause the container startup code to run `mqsisetdbparms` to provide the credentials
+to the ACE server, and the flows can read the credentials as usual.
+
+## Dashboard
+
+The dashboard allows the creation of configurations via the UI and for them to be attached to
+a server runtime. The first step is to create a setdbparms.txt credential configuration with
+either the simplified form of `type::name user pw`
+
+![setdbparms-configuration](/files/setdbparms-configuration.png)
+
+or with the full version (the UI only shows the first few characters of 
+`mqsisetdbparms  -w /tmp/test-work-dir -n userdefined::demoAlias -u demoUser -p demoPd -k demoApiKey -c demoId -s demoSec`)
+
+![setdbparms-configuration-full](/files/setdbparms-configuration-full.png)
+
+Once the configuration has been created, it can be attached via UI selection
+
+![add-configuration-ui](/files/add-configuration-ui.png)
+
+or using the YAML for the integration runtime:
+
+![ir-create-yaml](/files/ir-create-yaml.png)
+
+Once this is complete and the server has restarted, the logs should show the output of the ESQL
+credential read code:
+
+![ace-cloud-log](/files/ace-cloud-log.png)
+
+Note that the JavaCompute output is not captured in the log: the Java code is printing to stdou, and
+the log only captures BIP messages from the server.
+
+## API-driven credential creation
+
+The ACE cloud services and CP4i provide a REST API that allows for the creation of the setdbparms.txt
+configurations; see https://www.ibm.com/docs/en/app-connect/saas?topic=reference-api-overview for more
+API details and required credentials.
+
