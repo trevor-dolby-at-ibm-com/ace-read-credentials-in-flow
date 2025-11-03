@@ -29,6 +29,9 @@ public class ReadFlow_ReadCredsFromJava extends MbJavaComputeNode {
 			
 			String username = new String();
 			char[] password = new char[0];
+			char[] apiKey = new char[0];
+			char[] clientId = new char[0];
+			char[] clientSecret = new char[0];
 
 			String credsType = (String)(getUserDefinedAttribute("credsType"));
 			if ( ( credsType == null ) || ( credsType.isEmpty()) )
@@ -50,7 +53,6 @@ public class ReadFlow_ReadCredsFromJava extends MbJavaComputeNode {
 			try {
 				myCred = MbCredential.getCredential(credsType, alias);
 
-
 				if (myCred == null) {
 					System.out.println("Could not find credential "+credsType+"::"+alias);
 				}
@@ -62,8 +64,15 @@ public class ReadFlow_ReadCredsFromJava extends MbJavaComputeNode {
 						username = new String(credentialProperties.get(MbCredential.USERNAME));
 					if (credentialProperties.containsKey(MbCredential.PASSWORD))
 						password = credentialProperties.get(MbCredential.PASSWORD);
+					if (credentialProperties.containsKey(MbCredential.API_KEY))
+						apiKey = credentialProperties.get(MbCredential.API_KEY);
+					if (credentialProperties.containsKey(MbCredential.CLIENT_ID))
+						clientId = credentialProperties.get(MbCredential.CLIENT_ID);
+					if (credentialProperties.containsKey(MbCredential.CLIENT_SECRET))
+						clientSecret = credentialProperties.get(MbCredential.CLIENT_SECRET);
 					
-					System.out.println("Java code found username |"+username+"| password |"+(new String(password))+"|");
+					System.out.println("Java code found username |"+username+"| password |"+(new String(password))+
+							"| apiKey |"+(new String(apiKey))+"| clientId |"+(new String(clientId))+"| clientSecret |"+(new String(clientSecret))+"|");
 				}
 			} catch (MbException e) {
 				e.printStackTrace();
